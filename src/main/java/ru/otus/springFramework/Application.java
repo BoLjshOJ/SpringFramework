@@ -1,17 +1,18 @@
-import domain.Student;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import service.FileService;
-import service.StudentService;
+package ru.otus.springFramework;
 
-public class Main {
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import ru.otus.springFramework.domain.Student;
+import ru.otus.springFramework.service.QuestionService;
+import ru.otus.springFramework.service.StudentService;
+
+public class Application {
     public static void main(String[] args) {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/spring-context.xml");
 
         StudentService studentService = context.getBean(StudentService.class);
-        FileService fileService = context.getBean(FileService.class);
-
+        QuestionService questionService = context.getBean(QuestionService.class);
         Student one = studentService.createStudent();
-        one.checkAnswers(one.askQuestions(fileService.readQuestions()), fileService.readAnswers());
+        questionService.askQuestion(one);
         System.out.println(one);
     }
 }

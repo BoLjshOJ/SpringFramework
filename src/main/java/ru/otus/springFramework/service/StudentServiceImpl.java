@@ -1,7 +1,7 @@
-package service;
+package ru.otus.springFramework.service;
 
-import dao.StudentDao;
-import domain.Student;
+import ru.otus.springFramework.dao.StudentDao;
+import ru.otus.springFramework.domain.Student;
 
 public class StudentServiceImpl implements StudentService {
     private final StudentDao dao;

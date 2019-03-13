@@ -1,6 +1,6 @@
-package dao;
+package ru.otus.springFramework.dao;
 
-import domain.Student;
+import ru.otus.springFramework.domain.Student;
 
 import java.util.Scanner;
 
