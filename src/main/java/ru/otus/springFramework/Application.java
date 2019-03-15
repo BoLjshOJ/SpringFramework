@@ -1,18 +1,16 @@
 package ru.otus.springFramework;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.*;
 import ru.otus.springFramework.domain.Student;
 import ru.otus.springFramework.service.QuestionService;
+import ru.otus.springFramework.service.QuizService;
 import ru.otus.springFramework.service.StudentService;
 
+@ComponentScan
 public class Application {
     public static void main(String[] args) {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/spring-context.xml");
-
-        StudentService studentService = context.getBean(StudentService.class);
-        QuestionService questionService = context.getBean(QuestionService.class);
-        Student one = studentService.createStudent();
-        questionService.askQuestion(one);
-        System.out.println(one);
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Application.class);
+        QuizService quizService = context.getBean(QuizService.class);
+        quizService.startTest();
     }
 }

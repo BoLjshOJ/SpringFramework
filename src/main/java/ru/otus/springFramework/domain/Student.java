@@ -1,13 +1,19 @@
 package ru.otus.springFramework.domain;
 
+import ru.otus.springFramework.service.MessageService;
+
+import java.security.MessageDigest;
+
 public class Student {
     private final String name;
     private final String surname;
     private int countOfRightAnswers;
+    private MessageService messageService;
 
-    public Student(String name, String surname) {
+    public Student(String name, String surname, MessageService messageService) {
         this.name = name;
         this.surname = surname;
+        this.messageService = messageService;
     }
 
     public String getName() {
@@ -28,12 +34,14 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student " +
+        return messageService.getMessage("student") +
+                " " +
                 name +
                 " " +
                 surname +
                 ". " +
-                "Count of right answers is " +
+                messageService.getMessage("answered") +
+                " " +
                 countOfRightAnswers;
     }
 }

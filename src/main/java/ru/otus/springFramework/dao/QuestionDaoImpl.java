@@ -4,7 +4,10 @@ import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.otus.springFramework.domain.Question;
+import ru.otus.springFramework.service.MessageService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,18 +16,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Component
 public class QuestionDaoImpl implements QuestionDao {
     private List<Question> questions;
-    private String pathForQuestions;
+    private final MessageService messageService;
 
-    public QuestionDaoImpl(String pathForQuestions) {
-        this.pathForQuestions = pathForQuestions;
+    @Autowired
+    public QuestionDaoImpl(MessageService messageService) {
+        this.messageService = messageService;
     }
 
     public void initQuestionsFromCSV(){
         this.questions = new ArrayList<>();
         try {
-            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(pathForQuestions);
+            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(messageService.getMessage("pathForQuestions"));
             CSVParser parser = (new CSVParserBuilder()).withSeparator(';').build();
             CSVReader reader = (new CSVReaderBuilder(new InputStreamReader(inputStream))).withSkipLines(1).withCSVParser(parser).build();
             reader.readAll().forEach(this::createAndAddQuestion);
@@ -40,7 +45,7 @@ public class QuestionDaoImpl implements QuestionDao {
         String question = row[0];
         List<String> answers = Arrays.asList(row[1], row[2], row[3], row[4]);
         int numberOfRightAnswer = Integer.parseInt(row[5]);
-        this.questions.add(new Question(question, answers, numberOfRightAnswer));
+        this.questions.add(new Question(question, answers, numberOfRightAnswer, messageService));
     }
 
     public List<Question> getQuestions() {
