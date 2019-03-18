@@ -6,9 +6,6 @@ import ru.otus.springFramework.dao.QuestionDao;
 import ru.otus.springFramework.domain.Question;
 import ru.otus.springFramework.domain.Student;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,34 +13,35 @@ import java.util.List;
 public class QuestionServiceImpl implements QuestionService {
     private final QuestionDao questionDao;
     private final MessageService messageService;
+    private final IOService ioService;
 
     @Autowired
     public QuestionServiceImpl(
             QuestionDao questionDao,
-            MessageService messageService
+            MessageService messageService,
+            IOService ioService
     ) {
         this.questionDao = questionDao;
         this.messageService = messageService;
+        this.ioService = ioService;
     }
 
     public void askQuestion(Student student) {
         System.out.printf(messageService.getMessage("welcomeText") + "\n", student.getName());
         List<Integer> answersOfStudent = new ArrayList<>();
         List<Integer> rightAnswers = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))){
-            for (Question question : questionDao.getQuestions()){
-                System.out.println(question);
-                rightAnswers.add(question.getCorrectAnswer());
-                String ans = reader.readLine();
-                if (ans.isEmpty() || ans.matches(".*[^0-9].*")){
-                    answersOfStudent.add(0);
-                } else {
-                    answersOfStudent.add(Integer.parseInt(ans));
-                }
+
+        for (Question question : questionDao.getQuestions()){
+            System.out.println(question);
+            rightAnswers.add(question.getCorrectAnswer());
+            String ans = ioService.getStringFromSonsole();
+            if (ans.isEmpty() || ans.matches(".*[^0-9].*")){
+                answersOfStudent.add(0);
+            } else {
+                answersOfStudent.add(Integer.parseInt(ans));
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+
         student.setCountOfRightAnswers(checkAnswers(answersOfStudent, rightAnswers));
     }
 

@@ -2,8 +2,6 @@ package ru.otus.springFramework.domain;
 
 import ru.otus.springFramework.service.MessageService;
 
-import java.security.MessageDigest;
-
 public class Student {
     private final String name;
     private final String surname;

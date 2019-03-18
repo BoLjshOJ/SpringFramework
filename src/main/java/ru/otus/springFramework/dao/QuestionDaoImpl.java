@@ -5,6 +5,7 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.otus.springFramework.domain.Question;
 import ru.otus.springFramework.service.MessageService;
@@ -20,16 +21,18 @@ import java.util.List;
 public class QuestionDaoImpl implements QuestionDao {
     private List<Question> questions;
     private final MessageService messageService;
+    private final String filename;
 
     @Autowired
-    public QuestionDaoImpl(MessageService messageService) {
+    public QuestionDaoImpl(MessageService messageService, @Value("${filename}") String filename) {
         this.messageService = messageService;
+        this.filename = String.format("CSV/%s_%s.csv", filename, messageService.getLocale().getLanguage());
     }
 
     public void initQuestionsFromCSV(){
         this.questions = new ArrayList<>();
         try {
-            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(messageService.getMessage("pathForQuestions"));
+            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(filename);
             CSVParser parser = (new CSVParserBuilder()).withSeparator(';').build();
             CSVReader reader = (new CSVReaderBuilder(new InputStreamReader(inputStream))).withSkipLines(1).withCSVParser(parser).build();
             reader.readAll().forEach(this::createAndAddQuestion);
