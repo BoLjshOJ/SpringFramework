@@ -1,16 +1,15 @@
 package ru.otus.springFramework;
 
-import org.springframework.context.annotation.*;
-import ru.otus.springFramework.domain.Student;
-import ru.otus.springFramework.service.QuestionService;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import ru.otus.springFramework.config.YamlProps;
 import ru.otus.springFramework.service.QuizService;
-import ru.otus.springFramework.service.StudentService;
 
-@ComponentScan
+@SpringBootApplication
+@EnableConfigurationProperties(YamlProps.class)
 public class Application {
     public static void main(String[] args) {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Application.class);
-        QuizService quizService = context.getBean(QuizService.class);
-        quizService.startTest();
+        SpringApplication.run(Application.class, args).getBean(QuizService.class).startTest();
     }
 }
