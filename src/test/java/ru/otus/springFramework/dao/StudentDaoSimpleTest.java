@@ -1,23 +1,32 @@
 package ru.otus.springFramework.dao;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 import ru.otus.springFramework.domain.Student;
-import ru.otus.springFramework.service.MessageService;
+import ru.otus.springFramework.service.IOService;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import static org.mockito.BDDMockito.given;
 
-@DisplayName("Student")
-class StudentDaoSimpleTest {
-    private MessageService messageService;
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class StudentDaoSimpleTest {
 
-    @DisplayName("correctly created")
+    @Autowired
+    private StudentDao studentDao;
+    @MockBean
+    private IOService ioService;
+
     @Test
-    void createStudent() {
-        messageService = mock(MessageService.class);
-        Student one = new Student("Petr", "Petrov", messageService);
-        assertThat(one.getName()).isEqualToIgnoringCase("petr");
-        assertThat(one.getSurname()).isEqualToIgnoringCase("petrov");
+    public void createStudent() {
+        Student studentExpected = new Student("name", "surname");
+        given(ioService.getStringFromSonsole()).willReturn(studentExpected.getName(), studentExpected.getSurname());
+        Student studentActual = studentDao.createStudent();
+        assertThat(studentActual.getName()).isEqualTo(studentExpected.getName());
+        assertThat(studentActual.getSurname()).isEqualTo(studentExpected.getSurname());
     }
 }

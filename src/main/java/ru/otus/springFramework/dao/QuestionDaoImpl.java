@@ -7,6 +7,7 @@ import com.opencsv.CSVReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ru.otus.springFramework.config.YamlProps;
 import ru.otus.springFramework.domain.Question;
 import ru.otus.springFramework.service.MessageService;
 
@@ -24,9 +25,9 @@ public class QuestionDaoImpl implements QuestionDao {
     private final String filename;
 
     @Autowired
-    public QuestionDaoImpl(MessageService messageService, @Value("${filename}") String filename) {
+    public QuestionDaoImpl(MessageService messageService, YamlProps yamlProps) {
         this.messageService = messageService;
-        this.filename = String.format("CSV/%s_%s.csv", filename, messageService.getLocale().getLanguage());
+        this.filename = String.format("CSV/%s_%s.csv", yamlProps.getFilename(), messageService.getLocale().getLanguage());
     }
 
     public void initQuestionsFromCSV(){
@@ -48,7 +49,7 @@ public class QuestionDaoImpl implements QuestionDao {
         String question = row[0];
         List<String> answers = Arrays.asList(row[1], row[2], row[3], row[4]);
         int numberOfRightAnswer = Integer.parseInt(row[5]);
-        this.questions.add(new Question(question, answers, numberOfRightAnswer, messageService));
+        this.questions.add(new Question(question, answers, numberOfRightAnswer));
     }
 
     public List<Question> getQuestions() {

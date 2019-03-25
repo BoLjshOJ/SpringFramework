@@ -22,6 +22,6 @@ public class StudentDaoSimple implements StudentDao {
         String name = ioService.getStringFromSonsole();
         System.out.println(messageService.getMessage("inputSurname"));
         String surname = ioService.getStringFromSonsole();
-        return new Student(name, surname, messageService);
+        return new Student(name, surname);
     }
 }
