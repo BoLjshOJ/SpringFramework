@@ -14,16 +14,19 @@ public class QuestionServiceImpl implements QuestionService {
     private final QuestionDao questionDao;
     private final MessageService messageService;
     private final IOService ioService;
+    private final EntityPrinter printer;
 
     @Autowired
     public QuestionServiceImpl(
             QuestionDao questionDao,
             MessageService messageService,
-            IOService ioService
+            IOService ioService,
+            EntityPrinter printer
     ) {
         this.questionDao = questionDao;
         this.messageService = messageService;
         this.ioService = ioService;
+        this.printer = printer;
     }
 
     public void askQuestion(Student student) {
@@ -32,7 +35,7 @@ public class QuestionServiceImpl implements QuestionService {
         List<Integer> rightAnswers = new ArrayList<>();
 
         for (Question question : questionDao.getQuestions()){
-            System.out.println(question);
+            System.out.println(printer.printQuestion(question));
             rightAnswers.add(question.getCorrectAnswer());
             String ans = ioService.getStringFromSonsole();
             if (ans.isEmpty() || ans.matches(".*[^0-9].*")){

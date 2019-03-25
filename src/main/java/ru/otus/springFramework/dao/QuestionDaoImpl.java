@@ -49,7 +49,7 @@ public class QuestionDaoImpl implements QuestionDao {
         String question = row[0];
         List<String> answers = Arrays.asList(row[1], row[2], row[3], row[4]);
         int numberOfRightAnswer = Integer.parseInt(row[5]);
-        this.questions.add(new Question(question, answers, numberOfRightAnswer, messageService));
+        this.questions.add(new Question(question, answers, numberOfRightAnswer));
     }
 
     public List<Question> getQuestions() {
