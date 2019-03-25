@@ -14,7 +14,7 @@ public class Starter {
     private final QuizService quizService;
     private final StudentService studentService;
     private Student newStudent;
-    private boolean login;
+    private boolean isLoggedIn;
 
     @Autowired
     public Starter(QuizService quizService, StudentService studentService){
@@ -25,7 +25,7 @@ public class Starter {
     @ShellMethod("Login student")
     public void login(){
         newStudent = studentService.createStudent();
-        login = true;
+        isLoggedIn = true;
     }
 
     @ShellMethodAvailability("startAvailability")
@@ -35,6 +35,6 @@ public class Starter {
     }
 
     public Availability startAvailability(){
-        return login ? Availability.available() : Availability.unavailable("you are not login");
+        return isLoggedIn ? Availability.available() : Availability.unavailable("you are not login");
     }
 }
